@@ -85,6 +85,10 @@ class ClientController extends Controller
     private function serverFilter($servers, $typesArr, $filterArr, $region, $supportHy2)
     {
         return collect($servers)->reject(function ($server) use ($typesArr, $filterArr, $region, $supportHy2) {
+            if (!in_array($server['type'], $typesArr)) {
+                return true;
+            }
+            
             if ($server['type'] == "hysteria" && $server['version'] == 2) {
                 if(!in_array('hysteria2', $typesArr)){
                     return true;
@@ -116,6 +120,9 @@ class ClientController extends Controller
                     }
                 }
             }
+    
+            return false;
+            
         })->values()->all();
     }
     /*
